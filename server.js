@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const User = require('./models/user')
+const usersRouter = require('./controllers/users')
 
 mongoose.connect(process.env.MONGODB_URI)
 
@@ -11,6 +13,8 @@ mongoose.connection.once('connected', () => {
 mongoose.connection.on('error', () => {
     console.error('Error connecting to mongoDB')
 })
+app.use(express.json())
+app.use('/', usersRouter)
 
 app.listen(3000, () => {
     console.log('Listening on port 3000')
