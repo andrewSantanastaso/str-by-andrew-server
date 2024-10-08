@@ -3,6 +3,8 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const Cart = require('../models/cart')
+const verifyToken = require('../middleware/verify-token')
 
 const SALT_LENGTH = 12
 
@@ -18,15 +20,23 @@ router.post('/sign-up', async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             hashedPassword: bcrypt.hashSync(req.body.password, SALT_LENGTH)
+
         })
         const token = jwt.sign({
             username: user.username, _id: user
         }, process.env.JWT_SECRET)
+
+
         res.status(201).json({ user, token })
+
+
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
+
 })
+
+
 
 router.post('/sign-in', async (req, res) => {
     try {
@@ -37,7 +47,44 @@ router.post('/sign-in', async (req, res) => {
             }, process.env.JWT_SECRET)
 
             res.status(200).json({ user, token })
+
         }
+        else {
+            res.status(401).json({ error: 'Invalid username or password' })
+        }
+
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+
+    }
+})
+router.get('/sign-in', async (req, res) => {
+    try {
+        const user = await User({ findOne: req.body.username })
+        res.status(200).json({ user })
+    } catch (error) {
+        res.status(401).json({ error: error.message })
+        redirect('/sign-in')
+    }
+})
+
+router.post('/admin', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.body.username })
+        if (user && user.isAdmin && bcrypt.compareSync(req.body.password, user.hashedPassword)) {
+            const token = jwt.sign({
+                username: user.username, _id: user
+            }, process.env.JWT_SECRET)
+
+            res.status(200).json({ user, token })
+            res.redirect('/admin')
+        }
+        else if (!user.isAdmin) {
+            res.status(403).json({ error: 'User is not an administrator' })
+        }
+
+
+
         else {
             res.status(401).json({ error: 'Invalid username or password' })
         }

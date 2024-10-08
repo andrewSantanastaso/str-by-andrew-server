@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -17,7 +17,8 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    isAdmin: Boolean
+    userCart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
+    isAdmin: { type: Boolean, default: false, required: true }
 
 })
 
