@@ -20,7 +20,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/', usersRouter)
 app.use('/', productsRouter)
-app.use('/', cartsRouter)
+app.use('/cart', cartsRouter)
 
 app.listen(3000, () => {
     console.log('Listening on port 3000')
