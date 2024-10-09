@@ -29,6 +29,19 @@ router.get('/products', async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 })
+router.get('/:productId', async (req, res) => {
+    try {
+        const foundProduct = await Product.findById(req.params.productId)
+        if (foundProduct) {
+            res.status(201).json(foundProduct)
+        }
+        else {
+            res.status(404).json("Product Not Found")
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
 router.post('/new-product', async (req, res) => {
     try {
         const product = await Product.create({

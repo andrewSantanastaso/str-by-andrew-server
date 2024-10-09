@@ -7,18 +7,20 @@ const Cart = require('../models/cart')
 const verifyToken = require('../middleware/verify-token')
 
 
-router.post('/:userId/:productId', async (req, res, next) => {
+router.post('/:userId/:productId', async (req, res) => {
 
     try {
 
         const userId = await User.findOne({ userId: req.params._id })
-        const cart = await Cart.findOne({ userId })
+        let cart = await Cart.findOne({ userId })
         if (!cart) {
-            await Cart.create({
+            cart = await Cart.create({
                 userId: userId,
                 products: []
             })
+
         }
+
         const item = await Product.findOne({ productId: req.params._id });
         if (item) {
             cart.products.push(item)

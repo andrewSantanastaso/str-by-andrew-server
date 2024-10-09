@@ -64,7 +64,7 @@ router.get('/sign-in', async (req, res) => {
         res.status(200).json({ user })
     } catch (error) {
         res.status(401).json({ error: error.message })
-        redirect('/sign-in')
+
     }
 })
 
@@ -77,7 +77,7 @@ router.post('/admin', async (req, res) => {
             }, process.env.JWT_SECRET)
 
             res.status(200).json({ user, token })
-            res.redirect('/admin')
+
         }
         else if (!user.isAdmin) {
             res.status(403).json({ error: 'User is not an administrator' })
