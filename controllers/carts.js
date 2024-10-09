@@ -11,17 +11,20 @@ router.post('/:userId/:productId', async (req, res) => {
 
     try {
 
-        const userId = await User.findOne({ userId: req.params._id })
-        let cart = await Cart.findOne({ userId })
-        if (!cart) {
-            cart = await Cart.create({
-                userId: userId,
-                products: []
-            })
-
+        const user = await User.findOne({ _id: req.params.userId });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        const item = await Product.findOne({ productId: req.params._id });
+        let cart = await Cart.findOne({ userId: user._id });
+        if (!cart) {
+            cart = await Cart.create({
+                userId: user._id,
+                products: []
+            });
+        }
+
+        const item = await Product.findById(req.params.productId);
         if (item) {
             cart.products.push(item)
             res.status(201).json(cart)
@@ -51,8 +54,8 @@ router.post('/:userId/:productId', async (req, res) => {
 
 router.get('/:userId', async (req, res) => {
     try {
-        const userId = await User.findOne({ userId: req.params._id })
-        const userCart = await Cart.findOne({ userId })
+        const foundUser = await User.findById(req.params.userId)
+        const userCart = await Cart.findOne({ userId: foundUser })
 
 
         res.status(201).json(userCart)
