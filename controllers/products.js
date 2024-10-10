@@ -58,19 +58,19 @@ router.post('/new-product', async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 })
-router.put('/', verifyToken, async (req, res) => {
+router.put('/edit/:productId', async (req, res) => {
     try {
-        const product = await Product.find({})
-        const user = await User.findById(req.params.userId)
-        if (!user) {
-            res.status(404)
-            throw new Error('Please sign in to continue')
-        }
-        if (req.user._id !== req.params.userId) {
-            return res.status(401).json({ error: "Unauthorized" })
-        }
+        const product = await Product.findByIdAndUpdate(req.params.productId, req.body, { new: true })
+        // const user = await User.findById(req.params.userId)
+        // // if (!user) {
+        //     res.status(404)
+        //     throw new Error('Please sign in to continue')
 
+        // if (req.user._id !== req.params.userId) {
+        //     return res.status(401).json({ error: "Unauthorized" })
+        // }
 
+        res.status(201).json(product)
 
 
 
