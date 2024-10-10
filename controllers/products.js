@@ -77,12 +77,25 @@ router.put('/edit/:productId', async (req, res) => {
     } catch (error) {
         if (res.statusCode === 404) {
             res.status(404).json({ error: error.message });
+
         } else {
             res.status(500).json({ error: error.message });
         }
     }
 
 
+})
+
+
+router.delete('/delete/:productId', async (req, res) => {
+    try {
+        const productToDelete = await Product.findByIdAndDelete(req.params.
+            productId)
+
+        res.status(201).json('Deleted')
+    } catch (error) {
+        res.status(404).json('Unable to find and delete product')
+    }
 })
 
 module.exports = router
