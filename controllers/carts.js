@@ -26,9 +26,26 @@ router.post('/:userId/:productId', async (req, res) => {
 
         const item = await Product.findById(req.params.productId);
         if (item) {
-            cart.products.push(item)
-            res.status(201).json(cart)
+            const foundProduct = cart.products.find((p) => {
+                return p.product._id.toString() === req.params.productId
+            })
+            console.log(foundProduct)
+            if (foundProduct) {
+                foundProduct.quantity++
+            }
+            else {
+                cart.products.push({
+                    product: item,
+                    quantity: 1
+
+                })
+            }
+
+
+
+
             await cart.save()
+            res.status(201).json(cart)
 
 
 
@@ -55,10 +72,31 @@ router.post('/:userId/:productId', async (req, res) => {
 router.get('/:userId', async (req, res) => {
     try {
         const foundUser = await User.findById(req.params.userId)
-        const userCart = await Cart.findOne({ userId: foundUser })
+        const userCart = await Cart.findOne({ userId: foundUser._id })
 
 
         res.status(201).json(userCart)
+    } catch (error) {
+        console.error({ error: error.message })
+    }
+})
+
+router.delete('/:userId/:productId/delete', async (req, res) => {
+    try {
+        const foundUser = await User.findById(req.params.userId)
+        const foundCart = await Cart.findOne({ userId: foundUser._id })
+        const foundProductsInCart = foundCart.products
+
+        const newCart = foundProductsInCart.filter((item) => {
+            console.log(item.product._id, req.params.productId)
+            return item.product._id.toString() !== req.params.productId
+        })
+
+        const update = {
+            products: newCart
+        }
+        await Cart.findByIdAndUpdate(foundCart._id, update, { new: true })
+        res.status(201).json(newCart)
     } catch (error) {
         console.error({ error: error.message })
     }

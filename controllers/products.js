@@ -87,6 +87,14 @@ router.put('/edit/:productId', async (req, res) => {
 })
 
 
+router.put('/stock/:productId', async (req, res) => {
+    try {
+
+    } catch (error) {
+
+    }
+})
+
 router.delete('/delete/:productId', async (req, res) => {
     try {
         const productToDelete = await Product.findByIdAndDelete(req.params.
