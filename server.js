@@ -7,7 +7,7 @@ const User = require('./models/user')
 const usersRouter = require('./controllers/users')
 const productsRouter = require('./controllers/products')
 const cartsRouter = require('./controllers/carts')
-const PORT = null
+const PORT = 3000
 
 mongoose.connect(process.env.MONGODB_URI)
 
