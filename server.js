@@ -7,7 +7,7 @@ const User = require('./models/user')
 const usersRouter = require('./controllers/users')
 const productsRouter = require('./controllers/products')
 const cartsRouter = require('./controllers/carts')
-const PORT = 3000
+
 
 mongoose.connect(process.env.MONGODB_URI)
 
@@ -23,6 +23,6 @@ app.use('/', usersRouter)
 app.use('/', productsRouter)
 app.use('/cart', cartsRouter)
 
-app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`)
+app.listen(process.env.PORT, () => {
+    console.log(`Listening on ${process.env.PORT}`)
 })
