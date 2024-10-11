@@ -89,9 +89,12 @@ router.put('/edit/:productId', async (req, res) => {
 
 router.put('/stock/:productId', async (req, res) => {
     try {
+        const product = await Product.findByIdAndUpdate(req.params.productId, req.body, { new: true })
 
+
+        res.status(201).json(product)
     } catch (error) {
-
+        res.status(404).json({ error: error.message })
     }
 })
 

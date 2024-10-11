@@ -96,10 +96,14 @@ router.delete('/:userId/:productId/delete', async (req, res) => {
             products: newCart
         }
         await Cart.findByIdAndUpdate(foundCart._id, update, { new: true })
+
+
         res.status(201).json(newCart)
     } catch (error) {
         console.error({ error: error.message })
     }
 })
+
+
 
 module.exports = router
