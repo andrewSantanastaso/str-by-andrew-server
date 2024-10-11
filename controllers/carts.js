@@ -41,21 +41,8 @@ router.post('/:userId/:productId', async (req, res) => {
                 })
             }
 
-
-
-
             await cart.save()
             res.status(201).json(cart)
-
-
-
-
-
-            // else {
-            //     res.status(404).json({ message: "User not found" })
-            // }
-            // if (item) {
-            //     res.status(200).json(item);
 
         } else {
             res.status(404).json({ message: "Product not found" });

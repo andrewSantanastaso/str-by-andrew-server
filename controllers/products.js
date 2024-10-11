@@ -8,24 +8,12 @@ const verifyToken = require('../middleware/verify-token')
 router.get('/products', async (req, res) => {
     try {
         const allProducts = await Product.find({})
-        // const user = await User.findById(req.params.userId)
-        // if (!user) {
-        //     res.status(404)
-        //     throw new Error('Please sign in to continue')
-        // }
-        // if (req.user._id !== req.params.userId) {
-        //     return res.status(401).json({ error: "Unauthorized" })
-        // }
-        // const cart = user.cart
+
         res.status(201).json({ allProducts })
 
 
     } catch (error) {
-        // if (res.statusCode === 404) {
-        //     res.status(404).json({ error: error.message });
-        // } else {
-        //     res.status(500).json({ error: error.message });
-        // }
+
         res.status(400).json({ error: error.message })
     }
 })
@@ -61,18 +49,9 @@ router.post('/new-product', async (req, res) => {
 router.put('/edit/:productId', async (req, res) => {
     try {
         const product = await Product.findByIdAndUpdate(req.params.productId, req.body, { new: true })
-        // const user = await User.findById(req.params.userId)
-        // // if (!user) {
-        //     res.status(404)
-        //     throw new Error('Please sign in to continue')
 
-        // if (req.user._id !== req.params.userId) {
-        //     return res.status(401).json({ error: "Unauthorized" })
-        // }
 
         res.status(201).json(product)
-
-
 
     } catch (error) {
         if (res.statusCode === 404) {
