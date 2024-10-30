@@ -21,7 +21,7 @@ mongoose.connection.on('error', () => {
 app.use(cors())
 
 app.use(express.json())
-app.use(verifyToken)
+
 app.use('/', usersRouter)
 app.use('/', productsRouter)
 app.use('/cart', cartsRouter)

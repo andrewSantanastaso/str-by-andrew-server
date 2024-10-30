@@ -30,7 +30,7 @@ router.get('/:productId', async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 })
-router.post('/new-product', async (req, res) => {
+router.post('/new-product', verifyToken, async (req, res) => {
     try {
         const product = await Product.create({
             name: req.body.name,
@@ -46,7 +46,7 @@ router.post('/new-product', async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 })
-router.put('/edit/:productId', async (req, res) => {
+router.put('/edit/:productId', verifyToken, async (req, res) => {
     try {
         const product = await Product.findByIdAndUpdate(req.params.productId, req.body, { new: true })
 
@@ -77,7 +77,7 @@ router.put('/stock/:productId', async (req, res) => {
     }
 })
 
-router.delete('/delete/:productId', async (req, res) => {
+router.delete('/delete/:productId', verifyToken, async (req, res) => {
     try {
         const productToDelete = await Product.findByIdAndDelete(req.params.
             productId)

@@ -7,6 +7,8 @@ const Cart = require('../models/cart')
 const verifyToken = require('../middleware/verify-token')
 
 
+router.use(verifyToken)
+
 router.post('/:userId/:productId', async (req, res) => {
 
     try {
@@ -75,7 +77,7 @@ router.delete('/:userId/:productId/delete', async (req, res) => {
         const foundProductsInCart = foundCart.products
 
         const newCart = foundProductsInCart.filter((item) => {
-            console.log(item.product._id, req.params.productId)
+
             return item.product._id.toString() !== req.params.productId
         })
 

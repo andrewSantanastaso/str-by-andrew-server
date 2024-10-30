@@ -23,7 +23,7 @@ router.post('/sign-up', async (req, res) => {
 
         })
         const token = jwt.sign({
-            username: user.username, _id: user
+            username: user.username, _id: user._id
         }, process.env.JWT_SECRET)
 
 
@@ -43,7 +43,7 @@ router.post('/sign-in', async (req, res) => {
         const user = await User.findOne({ username: req.body.username })
         if (user && bcrypt.compareSync(req.body.password, user.hashedPassword)) {
             const token = jwt.sign({
-                username: user.username, _id: user
+                username: user.username, name: user.name, _id: user._id, isAdmin: user.isAdmin
             }, process.env.JWT_SECRET)
 
             res.status(200).json({ user, token })
@@ -58,15 +58,15 @@ router.post('/sign-in', async (req, res) => {
 
     }
 })
-router.get('/sign-in', async (req, res) => {
-    try {
-        const user = await User({ findOne: req.body.username })
-        res.status(200).json({ user })
-    } catch (error) {
-        res.status(401).json({ error: error.message })
+// router.get('/sign-in', async (req, res) => {
+//     try {
+//         const user = await User({ findOne: req.body.username })
+//         res.status(200).json({ user })
+//     } catch (error) {
+//         res.status(401).json({ error: error.message })
 
-    }
-})
+//     }
+// })
 
 router.post('/admin', async (req, res) => {
     try {
